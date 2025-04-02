@@ -1,8 +1,32 @@
+import requests
+
+
+def get_toponym_coordinates(toponym_to_find):
+    geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+    geocoder_params = {
+        "apikey": "8013b162-6b42-4997-9691-77b7074026e0",
+        "geocode": toponym_to_find,
+        "format": "json"
+    }
+
+    response = requests.get(geocoder_api_server, params=geocoder_params)
+    if not response:
+        return None
+
+    json_response = response.json()
+    try:
+        toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+        return toponym
+    except (IndexError, KeyError):
+        return None
+
+
 def get_spn(toponym):
-    toponym_delta_1 = list(
-        map(float, toponym['boundedBy']['Envelope']['lowerCorner'].split()))
-    toponym_delta_2 = list(
-        map(float, toponym['boundedBy']['Envelope']['upperCorner'].split()))
-    delta1 = str(abs(toponym_delta_1[0] - toponym_delta_2[0]))
-    delta2 = str(abs(toponym_delta_1[1] - toponym_delta_2[1]))
-    return delta1, delta2
+    envelope = toponym["boundedBy"]["Envelope"]
+    lower_corner = envelope["lowerCorner"].split()
+    upper_corner = envelope["upperCorner"].split()
+
+    delta_lon = str(abs(float(upper_corner[0]) - float(lower_corner[0])) / 2)
+    delta_lat = str(abs(float(upper_corner[1]) - float(lower_corner[1])) / 2)
+
+    return f"{delta_lon},{delta_lat}"
