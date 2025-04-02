@@ -3,7 +3,6 @@ from mapapi_PG import show_map
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Использование: python main.py <адрес>")
         sys.exit(1)
 
     toponym_to_find = " ".join(sys.argv[1:])
