@@ -3,7 +3,7 @@ import requests
 
 def find_nearest_business(coords, business_type):
     search_api_server = "https://search-maps.yandex.ru/v1/"
-    api_key = "f3a0fe3a-b07e-4840-a1da-06f18b2ddf13"
+    api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
 
     search_params = {
         "apikey": api_key,
